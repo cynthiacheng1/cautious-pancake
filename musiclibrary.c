@@ -12,7 +12,7 @@ struct song_node * table[26];
 
 void print_list(struct song_node *n){
     while (n){
-      printf(" [%c|%c] ", (*song_node).artist, (*song_node).name);
+      printf(" [%s|%s] ", (*n).artist, (*n).name);
       n = n -> next; //(*n).next
     }
 }
@@ -59,6 +59,14 @@ struct song_node * indiv_song(char[] song){
 }
 
 int main(){
-  struct song* test1 = 0;
+  struct song_node *node = NULL;
+  printf("insert_front w song");
+  while(i <= 10){
+    char[] song = "abc";
+    char[] artist = "me";
+    node = insert_front(node, song, artist);
+    i++;
+  }
+  print_list(node);
 
 }
