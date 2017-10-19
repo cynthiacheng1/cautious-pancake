@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+
 struct song_node{
   char name[256];
   char artist[256];
@@ -19,10 +20,10 @@ void print_list(struct song_node *n){
 
 struct song_node * insert_front(struct song_node *pointer , char[] song_name, char[] song_artist){
   struct song_node *frontP = (struct song_node *)malloc(sizeof(struct song_node));
-  (* frontP).name = song_name;
-  (* frontP).artist = song_artist;
-  (* frontP).next = pointer;
-  return frontP;
+  (*n).next = 0;
+  strcopy((*n).name, song_name);
+  strcopy((*n).artist, song_artist);
+  return n;
 }
 
 struct song_node * insert_in_order(struct song_node *pointer , char[] song_name, char[] song_artist){
@@ -37,6 +38,51 @@ struct song_node * insert_in_order(struct song_node *pointer , char[] song_name,
   }
 }
 
+struct song_node * indiv_song(struct song_node *pointer){
+  char[] input_artist = (*pointer).artist;
+  char[] input_song = (*pointer).name;
+  struct song_node * beginning = &table[input_artist[0]-'a'];
+  while (beginning){
+    if ((*beginning).name.strcmp(input_song) = 0){
+      return beginning;
+    }
+  }
+  return NULL;
+}
+
+struct song_node * indiv_artist(struct song_node *pointer){
+  char[] input_artist = (*pointer).artist;
+  char[] input_song = (*pointer).name;
+  struct song_node * beginning = &table[input_artist[0]-'a'];
+  while (beginning){
+    if ((*beginning).artist.strcmp(input_artist) = 0){
+      return beginning;
+    }
+  }
+  return NULL;
+}
+
+struct song_node * random_song(struct song_node *n){
+  srand(time(NULL));
+  // int r = rand()%26; -> figure out array yo
+  struct song_node *length = n;
+  int len = 0
+  while (length){
+    n = n -> next;
+    len++;
+  }
+  int r = rand()%len;
+  while (r){
+    n = n -> next;
+    r--;
+  }
+  return n;
+}
+
+struct song_node * remove_node(struct song_node *pointer){
+
+}
+
 struct song_node * free_list(struct song_node *pointer){
   struct song_node *retpoint = pointer;
   while(pointer){
@@ -46,16 +92,6 @@ struct song_node * free_list(struct song_node *pointer){
     updater = NULL;
   }
   return pointer;
-}
-
-struct song_node * indiv_song(char[] song){
-  struct song_node * beginning = &table[song[0]-65];
-  while (beginning){
-    if ((*beginning).name.strcmp(song) = 0){
-      return beginning;
-    }
-  }
-  return NULL;
 }
 
 int main(){
