@@ -11,7 +11,7 @@ struct song_node{
 
 void print_list(struct song_node *n){
     while (n){
-      printf(" [%s|%s] ", (*n).artist, (*n).name);
+      printf(" [%s|%s] \n", (*n).artist, (*n).name);
       n = n -> next; //(*n).next
     }
 }
@@ -26,15 +26,16 @@ struct song_node * insert_front(struct song_node *currentF, char * song_name, ch
 
 struct song_node * insert_in_order(struct song_node *pointer, char * song_name, char * song_artist){
   struct song_node *retVal = (struct song_node *)malloc(sizeof(struct song_node));
-  if (strcmp(song_artist, (*pointer).artist) < 0){
+  if (strcmp(song_artist, (*pointer).artist) > 0){
     retVal = insert_front(pointer, song_name, song_artist);
   }
   while (pointer){
-      if (strcmp(song_artist, (*(pointer->next)).artist) < 0){
-        pointer->next = insert_front(pointer->next, song_name, song_artist);
+      if (strcmp(song_artist, (*(pointer->next)).artist) > 0){
+        (*pointer).next = insert_front(pointer->next, song_name, song_artist);
+        printf("%s", (*(pointer->next->next)).artist);
+        return pointer-> next;
       }
-      pointer = (*pointer).next;
-      retVal = pointer;
+      pointer = pointer-> next;
   }
   return retVal;
 }
@@ -89,8 +90,25 @@ struct song_node * remove_node(struct song_node *pointer, struct song_node *remo
     }
     return removeN;
   }
+}
 
+struct song_node * free_list(struct song_node *pointer){
+  while(pointer){
+    struct song_node *updater = pointer;
+    pointer = pointer->next;
+    free(updater);
+    updater = NULL;
+  }
+  return pointer;
 }
 
 int main(){
+  struct song_node *first = NULL;
+  printf("Testing insert front with Mariah Carey and A$AP Rocky...\n");
+  first = insert_front(first, "All I Want for Christmas is You", "Mariah Carey");
+  first = insert_front(first, "Goldie", "A$AP Rocky");
+  print_list(first);
+  printf("Testing insert in order with Ke$ha...\n");
+  //first = insert_in_order(first, "TiK ToK", "Ke$ha");
+  //print_list(first);
 }
