@@ -70,9 +70,12 @@ struct song_node * find_song_by_artist(struct song_node *pointer, char * song_ar
   return NULL;
 }
 
+void my_init() {
+    srand(time(NULL));
+}
+
 struct song_node * random_song(struct song_node *n){
   int length = get_length(n);
-  srand( time(NULL) );
   int numberR = rand() % length;
   for (; numberR > 0; numberR--){
     n = n->next;
@@ -110,6 +113,7 @@ struct song_node * free_list(struct song_node *pointer){
 
 void print_by_letter(struct song_node *pointer, char * letter){
   while(pointer){
+    printf("nlah \n");
     if ((&((*pointer).artist))[0] == letter){
       printf(" [%s|%s] \n", (*pointer).artist, (*pointer).name);
     }
@@ -126,17 +130,22 @@ void print_by_artist(struct song_node *pointer, char * artist){
   }
 }
 
-void shuffle(struct song_node *pointer, int n){
+void shuffle(struct song_node *pointer){
+  int length = get_length(pointer)-1;
+  printf ("%d \n" , length);
+  int i =0;
   struct song_node *current = (struct song_node *)malloc(sizeof(struct song_node));
-  int i = n;
-  while (i > 0){
+  while (i < length){
+    printf("nlah \n");
     current = random_song(pointer);
     printf(" [%s|%s] \n", (*current).artist, (*current).name);
-    i--;
+    remove_node(pointer, current);
+    i++;
   }
 }
 
 int main(){
+  my_init();
   struct song_node *first = NULL;
 
   printf("Testing insert front with Mariah Carey and A$AP Rocky...\n");
@@ -162,13 +171,17 @@ int main(){
   insert_in_order(first, "Dream Lover", "Bobby Darin");
   insert_in_order(first, "Piano Man", "Billy Joel");
   insert_in_order(first, "We Didn't Start the Fire", "Billy Joel");
+  insert_in_order(first, "Yesterday", "Beatles");
+  insert_in_order(first, "Mr. Brightside", "The Killers");
   printf("Add a few more songs...\n");
   print_list(first);
 
   printf("Testing print all songs under B...\n");
   print_by_letter(first, "B");
+
+  printf("Testing print all songs under Billy Joel...\n");
   print_by_artist(first, "Billy Joel");
 
   printf("Testing shuffle...\n");
-  shuffle(first, 1);
+  shuffle(first);
 }
