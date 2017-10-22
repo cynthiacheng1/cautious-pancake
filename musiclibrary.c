@@ -43,6 +43,12 @@ struct song_node * insert_in_order(struct song_node *pointer, char * song_name, 
         (*pointer).next = insert_front(pointer->next, song_name, song_artist);
         return pointer->next;
       }
+      // else if (strcmp(song_artist, (*(pointer->next)).artist) > 0) {
+      //   struct song_node *end = (struct song_node *)malloc(sizeof(struct song_node));
+      //   strcpy((*end).name, song_name);
+      //   strcpy((*end).artist, song_artist);
+      //   (*pointer).next = end;
+      // }
       pointer = pointer -> next;
   }
   return insert_front(pointer, song_name, song_artist);
@@ -103,18 +109,18 @@ struct song_node * remove_node(struct song_node *pointer, struct song_node *remo
   }
 }
 
-struct song_node * free_list(struct song_node *pointer){
-  while(pointer-> next){
-    remove_node(pointer, pointer->next);
+void free_list(struct song_node *pointer){
+  while(pointer){
+    struct song_node * temp = pointer;
+    pointer = pointer-> next;
+    free(temp);
+    temp = NULL;
   }
-  pointer = NULL;
-  return NULL;
 }
 
-void print_by_letter(struct song_node *pointer, char * letter){
+void print_by_letter(struct song_node *pointer, char letter){
   while(pointer){
-    printf("nlah \n");
-    if ((&((*pointer).artist))[0] == letter){
+    if ((&(pointer->name)[0])[0] == letter){
       printf(" [%s|%s] \n", (*pointer).artist, (*pointer).name);
     }
     pointer = pointer-> next;
@@ -132,11 +138,9 @@ void print_by_artist(struct song_node *pointer, char * artist){
 
 void shuffle(struct song_node *pointer){
   int length = get_length(pointer)-1;
-  printf ("%d \n" , length);
   int i =0;
   struct song_node *current = (struct song_node *)malloc(sizeof(struct song_node));
   while (i < length){
-    printf("nlah \n");
     current = random_song(pointer);
     printf(" [%s|%s] \n", (*current).artist, (*current).name);
     remove_node(pointer, current);
@@ -153,7 +157,7 @@ int main(){
   first = insert_front(first, "Goldie", "A$AP Rocky");
   print_list(first);
 
-  printf("Testing insert in order with Ke$ha...\n");
+  printf("Testing insert in order with Ke$ha and Billy Joel...\n");
   insert_in_order(first, "TiK ToK", "Ke$ha");
   insert_in_order(first, "Paint it Black", "Rolling Stones");
   insert_in_order(first, "Piano Man", "Billy Joel");
@@ -163,11 +167,10 @@ int main(){
   remove_node(first, find_song(first, "Piano Man", "Billy Joel"));
   print_list(first);
 
-  printf("Testing free list...\n");
-  //free_list(first);
-
   insert_in_order(first, "Sugar Sugar", "The Archies");
   insert_in_order(first, "I'm a Believer", "The Monkees");
+  insert_in_order(first, "Something", "T Pain");
+  insert_in_order(first, "XO Life Tour", "Lil Uzi");
   insert_in_order(first, "Dream Lover", "Bobby Darin");
   insert_in_order(first, "Piano Man", "Billy Joel");
   insert_in_order(first, "We Didn't Start the Fire", "Billy Joel");
@@ -176,12 +179,16 @@ int main(){
   printf("Add a few more songs...\n");
   print_list(first);
 
-  printf("Testing print all songs under B...\n");
-  print_by_letter(first, "B");
+  printf("Testing print all songs under G...\n");
+  print_by_letter(first, 'G');
 
   printf("Testing print all songs under Billy Joel...\n");
   print_by_artist(first, "Billy Joel");
 
   printf("Testing shuffle...\n");
   shuffle(first);
+
+  printf("Testing free list...\n");
+  free_list(first);
+
 }
